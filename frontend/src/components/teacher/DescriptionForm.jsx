@@ -46,12 +46,13 @@ export default function TitleForm({ description, id, setCourseChanged }) {
             <form action={editDescription} className="flex flex-col space-y-2">
               <textarea
                 rows={3}
-                maxLength={1000}
+                maxLength={2000}
                 id="description"
                 name="description"
                 placeholder="e.g. 'This course is about...'"
                 defaultValue={description ? description : null}
                 className="pl-2 border-2 border-gray-400  rounded-md"
+                required
               />
               <button
                 type="submit"

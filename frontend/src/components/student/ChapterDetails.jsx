@@ -70,19 +70,19 @@ export default function ChapterDetails({ title, description, isLocked, coursePri
 
   return (
     <div className="mt-8">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col space-y-3 justify-between items-center mb-4 md:flex-row md:space-y-0">
         <p className="font-bold text-lg">{title}</p>
         {isLocked || !isEnrolled ? (
           <button
             onClick={enrollInCourse}
-            className="bg-sky-800 px-3 py-[8px] text-sm text-white font-semibold rounded-md"
+            className="w-full bg-sky-800 px-3 py-[8px] text-sm text-white font-semibold rounded-md md:w-auto"
           >
             Enroll for {coursePrice}₹
           </button>
         ) : isCompleted ? (
           <button
             onClick={toggleCompletion}
-            className="py-2 px-3 text-sm font-semibold flex items-center space-x-1 border-[1px] border-gray-300 rounded-md"
+            className="w-full py-2 px-3 text-sm font-semibold flex justify-center items-center space-x-1 border-[1px] border-gray-300 rounded-md md:w-auto"
           >
             <span>Not completed</span>
             <CircleX size={16} />
@@ -90,7 +90,7 @@ export default function ChapterDetails({ title, description, isLocked, coursePri
         ) : (
           <button
             onClick={toggleCompletion}
-            className="px-3 py-2 flex items-center space-x-2 bg-emerald-700 rounded-md text-sm text-white font-semibold"
+            className="px-3 w-full py-2 flex justify-center items-center space-x-2 bg-emerald-700 rounded-md text-sm text-white font-semibold md:w-auto"
           >
             <span>Mark as complete</span> <CircleCheckBig size={16} />
           </button>
@@ -101,7 +101,7 @@ export default function ChapterDetails({ title, description, isLocked, coursePri
       </div>
       <div>
         <span className="font-semibold italic">Objectives :</span>
-        <div className="mt-2">{description && parse(description)}</div>
+        <div className="mt-2 pb-10">{description && parse(description)}</div>
       </div>
     </div>
   );

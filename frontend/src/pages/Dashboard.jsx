@@ -26,8 +26,8 @@ export default function Dashboard() {
           </div>
         </Banner>
       )}
-      <div className="p-10">
-        <div className="flex space-x-5">
+      <div className="p-4 lg:p-10">
+        <div className="flex flex-col mb-10 space-y-4 md:flex-row md:space-x-5 md:space-y-0">
           <InfoCard count={courseStats.inProgress} />
           <InfoCard variant="success" count={courseStats.completed} />
         </div>

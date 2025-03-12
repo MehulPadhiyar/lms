@@ -18,8 +18,8 @@ export default function Analytics() {
   }, []);
 
   return (
-    <div className="p-10 flex flex-col w-full space-y-6">
-      <div className="flex space-x-6">
+    <div className="p-10 flex flex-col w-full space-y-10 md:space-y-6">
+      <div className="flex flex-col space-y-4 md:flex-row md:space-x-6 md:space-y-0">
         <DataCard data={data.revenue} />
         <DataCard variant="Sales" data={data.sales} />
       </div>

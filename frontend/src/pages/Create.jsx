@@ -22,16 +22,15 @@ export default function Create() {
   }
 
   return (
-    <div className="h-full flex flex-col justify-center items-center pb-[15rem]">
+    <div className="h-full px-10 flex flex-col justify-center items-center pb-[15rem]">
       <div>
         <h1 className="font-bold text-3xl mb-1">Name your course</h1>
         <p>What would you like to call your course? Enter the title below!</p>
 
         <form action={onSubmit}>
-          <label htmlFor="title" className="flex flex-col mt-10">
+          <label htmlFor="title" className="flex flex-col mt-4 md:mt-10">
             <span className="font-semibold mb-1">Course title</span>
             <input
-              defaultValue="web"
               type="text"
               id="title"
               name="title"
@@ -40,12 +39,14 @@ export default function Create() {
               required
             />
           </label>
+
           <Link to={'/'} className="px-4 py-[8.5px] mr-4 rounded-lg bg-slate-100 hover:bg-slate-200" reloadDocument>
             <span className="font-semibold text-sm pt-[6px]">Cancel</span>
           </Link>
           <button type="submit" className="text-sm bg-black text-white px-4 py-[7.5px] rounded-lg hover:bg-gray-800">
             Continue
           </button>
+
           <Toaster />
         </form>
       </div>

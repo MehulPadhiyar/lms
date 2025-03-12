@@ -37,7 +37,7 @@ export default function ChapterPage() {
 
   return (
     <>
-      <div ref={divRef}>
+      <div className="mt-[82px] md:mt-0" ref={divRef}>
         {isLocked && (
           <Banner>
             <TriangleAlert className="size-5" />
@@ -45,7 +45,7 @@ export default function ChapterPage() {
           </Banner>
         )}
       </div>
-      <div className="px-44 pt-6">
+      <div className="px-4 lg:px-14 xl:px-44 pt-6">
         {!isLocked ? (
           <VideoPlayer videoUrl={chapter?.videoUrl} courseId={courseId} chapterId={chapterId} />
         ) : (

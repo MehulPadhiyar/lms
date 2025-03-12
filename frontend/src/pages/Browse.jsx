@@ -64,8 +64,8 @@ export default function Browse() {
           </div>
         </Banner>
       )}
-      <div className="p-6">
-        <div className="flex justify-center space-x-2">
+      <div className="p-4 lg:p-6">
+        <div className="flex flex-col space-y-3 md:grid md:grid-cols-3 md:space-y-0 md:gap-3 lg:flex lg:justify-center lg:flex-row lg:space-y-0 lg:gap-0 lg:space-x-2">
           {categories.map((cat) => {
             return (
               <NavLink
@@ -73,8 +73,8 @@ export default function Browse() {
                 to={`?categoryId=${cat.id}`}
                 className={
                   isActiveCategory(cat.id)
-                    ? 'flex items-center space-x-1 px-3 py-[6px] text-[0.850rem] text-sky-700 font-bold border-[2px] border-sky-700 rounded-full bg-sky-100'
-                    : 'flex items-center space-x-1 px-3 py-[6px] text-[0.850rem] font-bold border-2 rounded-full border-gray-400 hover:border-sky-700'
+                    ? 'flex items-center justify-center space-x-1 px-3 py-[6px] text-[0.850rem] text-sky-700 font-bold border-[2px] border-sky-700 rounded-full bg-sky-100'
+                    : 'flex items-center justify-center space-x-1 px-3 py-[6px] text-[0.850rem] font-bold border-2 rounded-full border-gray-400 hover:border-sky-700'
                 }
               >
                 {cat.icon}
@@ -83,8 +83,8 @@ export default function Browse() {
             );
           })}
         </div>
-        <div className="flex justify-center mt-9">
-          <div className="border-[1px] border-gray-300 rounded-full w-[70%]"></div>
+        <div className="flex justify-center mt-6 lg:mt-9">
+          <div className="border-[1px] border-gray-300 rounded-full w-full lg:w-[70%]"></div>
         </div>
         <CourseList />
       </div>

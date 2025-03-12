@@ -4,8 +4,9 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import CourseSidebarItem from './CourseSidebarItem';
 import UserProgress from '../student/UserProgress';
+import Hamburger from 'hamburger-react';
 
-export default function CourseSidebar() {
+export default function CourseSidebar({ isOpen, setIsOpen }) {
   const { courseId } = useParams();
   const [course, setCourse] = useState();
   const chapters = course?.chapters;
@@ -43,8 +44,13 @@ export default function CourseSidebar() {
 
   return (
     <div className="h-full">
-      <div className="border-b-2 py-8 px-4">
-        <p className={`font-bold text-lg flex justify-center ${course?.isEnrolled && 'mb-6'}`}>{course?.title}</p>
+      <div className="md:hidden flex justify-end">
+        <Hamburger toggled={isOpen} toggle={setIsOpen} rounded />
+      </div>
+      <div className="border-b-2 pb-8 md:py-8 px-4">
+        <p className={`font-bold text-lg flex justify-center ${course?.isEnrolled && 'mb-4 md:mb-6'}`}>
+          {course?.title}
+        </p>
         {course?.isEnrolled && <UserProgress progress={course?.userProgress} size="text-sm" />}
       </div>
       <div className="flex flex-col">
@@ -56,6 +62,7 @@ export default function CourseSidebar() {
             title={chap.title}
             isLocked={!chap.isFree && !course.isEnrolled}
             isCompleted={checkCompletion(chap.chapter_id)}
+            setIsOpen={setIsOpen}
           />
         ))}
       </div>

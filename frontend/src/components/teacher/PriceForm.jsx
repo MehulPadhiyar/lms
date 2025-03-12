@@ -22,7 +22,7 @@ export default function PriceForm({ price, id, setCourseChanged }) {
   }
 
   return (
-    <div className="bg-slate-100 py-5 px-4 mt-6 space-y-2 rounded-lg">
+    <div className="bg-slate-100 py-5 px-4 mt-6 space-y-0 md:space-y-2 rounded-lg">
       <div className="flex justify-between">
         <span className="font-semibold">Course price</span>
         <button

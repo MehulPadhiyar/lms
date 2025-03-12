@@ -35,7 +35,7 @@ export default function ChapterVideoForm({ videoUrl, courseId, chapterId, setCha
   }
 
   return (
-    <div className="bg-slate-100 py-2 px-4 mt-6 space-y-2 rounded-lg">
+    <div className="bg-slate-100 py-2 lg:pb-4 px-4 mt-6 space-y-2 rounded-lg">
       <div className="flex justify-between items-center">
         <span className="font-semibold">Chapter video</span>
         <button
@@ -72,7 +72,7 @@ export default function ChapterVideoForm({ videoUrl, courseId, chapterId, setCha
         ) : (
           <>
             <form action={editVideo} className="flex flex-col space-y-2">
-              <input type="file" name="chapter-video" id="chapter-video" accept="video/*" />
+              <input type="file" name="chapter-video" id="chapter-video" accept="video/*" required />
               <button
                 type="submit"
                 className="bg-black h-[30px] flex justify-center items-center text-white text-sm py-2 rounded-md hover:bg-gray-800 w-[4rem]"

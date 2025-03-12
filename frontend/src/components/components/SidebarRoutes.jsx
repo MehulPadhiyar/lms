@@ -27,11 +27,11 @@ const teacherRoutes = [
   },
 ];
 
-export default function SidebarRoutes() {
+export default function SidebarRoutes({ setIsOpen }) {
   const pathname = window.location.pathname;
   const isTeacher = pathname.startsWith('/teacher');
   const routes = isTeacher ? teacherRoutes : guestRoutes;
   return routes.map((route) => (
-    <SidebarItem key={route.href} Icon={route.icon} label={route.label} href={route.href} />
+    <SidebarItem key={route.href} Icon={route.icon} label={route.label} href={route.href} setIsOpen={setIsOpen} />
   ));
 }

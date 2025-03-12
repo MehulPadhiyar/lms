@@ -34,7 +34,7 @@ export default function CourseList() {
   return (
     <>
       {courses.length > 0 ? (
-        <div className="rounded-lg mt-6 p-4 grid grid-cols-4 gap-5">
+        <div className="rounded-lg mx-auto mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 lg:p-4 xl:grid-cols-4">
           {courses.map((course) => (
             <CourseCard
               key={course.course_id}

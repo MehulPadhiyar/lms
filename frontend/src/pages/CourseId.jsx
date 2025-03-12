@@ -54,8 +54,8 @@ export default function CourseId() {
           <p>This course is unpublished. It will not be visible to the student other than enrolled.</p>
         </Banner>
       )}
-      <div ref={courseRef} className="p-6 max-w-[80%]">
-        <div className="flex justify-between">
+      <div ref={courseRef} className="p-4 pb-10 w-full md:p-6 xl:max-w-[80%]">
+        <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold ml-0">Course setup</h1>
             <span className="text-sm text-gray-500">
@@ -71,9 +71,9 @@ export default function CourseId() {
             />
           </div>
         </div>
-        <div className="flex space-x-20">
+        <div className="flex flex-col space-x-0 lg:flex-row lg:space-x-20">
           <div className="w-full">
-            <div className="flex items-center space-x-2 mt-16">
+            <div className="flex items-center space-x-2 mt-8 lg:mt-16">
               <div className="bg-secondary rounded-full size-9 p-[3px] flex justify-center items-center">
                 <LayoutDashboard className="size-6 text-primary" />
               </div>
@@ -98,7 +98,7 @@ export default function CourseId() {
           </div>
 
           <div className="w-full">
-            <div className="flex items-center space-x-2 mt-16">
+            <div className="flex items-center space-x-2 mt-10 lg:mt-16">
               <div className="bg-secondary rounded-full size-9 p-[3px] flex justify-center items-center">
                 <ListChecks className="size-6 text-primary" />
               </div>

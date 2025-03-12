@@ -38,21 +38,23 @@ export default function ChapterActions({ isPublished, chapterId, courseId, setCh
 
   return (
     <>
-      <div className="flex space-x-2">
+      <div className="flex md:space-x-2 flex-col space-y-2 md:flex-row md:space-y-0">
         <button
           onClick={togglePublish}
           disabled={!isCompleted}
           className={`${
-            isPublished ? 'bg-slate-100 text-gray-600 hover:bg-gray-300' : 'bg-primary text-white hover:opacity-90'
-          } px-3 py-[6px] rounded-lg font-semibold text-sm disabled:bg-gray-100 disabled:text-gray-200`}
+            isPublished
+              ? 'bg-slate-200 md:bg-slate-100 text-gray-600 hover:bg-gray-300'
+              : 'bg-primary text-white hover:opacity-90'
+          } px-3 py-[6px] rounded-lg font-semibold text-[1rem] md:text-sm disabled:bg-gray-100 disabled:text-gray-200`}
         >
           {isPublished ? 'Unpublish' : 'Publish'}
         </button>
         <button
           onClick={() => setIsModalVisible(true)}
-          className="bg-black text-white px-3 rounded-md hover:bg-gray-800"
+          className="bg-black text-white flex justify-center items-center px-3 py-2 md:py-0 rounded-md hover:bg-gray-800"
         >
-          <Trash2 className="size-4" />
+          <Trash2 className="size-5 md:size-4" />
         </button>
       </div>
       {isModalVisible && (

@@ -50,7 +50,7 @@ export default function Chapter() {
           <ArrowLeft className="size-4 group-hover:-translate-x-1" />
           <span>Back to course setup</span>
         </Link>
-        <div className="flex justify-between">
+        <div className="flex justify-between flex-col space-y-4 md:space-y-0 md:flex-row">
           <div>
             <h1 className="text-2xl font-bold ml-0">Chapter creation</h1>
             <span className="text-sm text-gray-500">
@@ -67,8 +67,8 @@ export default function Chapter() {
             />
           </div>
         </div>
-        <div className="flex space-x-20 mt-16">
-          <div className="w-[40%]">
+        <div className="flex flex-col space-x-0 mt-8 lg:flex-row lg:space-x-20 lg:mt-16">
+          <div className="lg:w-[40%]">
             <div className="flex items-center space-x-2">
               <div className="bg-sky-100 rounded-full size-9 p-[3px] flex justify-center items-center">
                 <LayoutDashboard className="size-6" color="#0369a1" />
@@ -103,7 +103,7 @@ export default function Chapter() {
               setChapterChanged={setChapterChanged}
             />
           </div>
-          <div className="w-[35%]">
+          <div className="xl:w-[40%] lg:w-[50%] mt-10 lg:mt-0">
             <div className="flex items-center space-x-2">
               <div className="bg-sky-100 rounded-full size-9 p-[3px] flex justify-center items-center">
                 <Video className="size-6" color="#0369a1" />

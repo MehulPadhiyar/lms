@@ -22,7 +22,7 @@ export default function Chapter({ chapter, courseId, children }) {
         >
           {children}
         </span>
-        <p className="flex items-center ml-4">{chapter.title}</p>
+        <p className="text-sm md:text-[1rem] flex items-center ml-2 md:ml-4">{chapter.title}</p>
       </div>
       <div className="flex items-center space-x-2">
         {chapter.isFree && <Label bgColor="black">Free</Label>}

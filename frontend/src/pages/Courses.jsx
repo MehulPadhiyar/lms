@@ -23,7 +23,7 @@ export default function Course() {
   }, []);
 
   return (
-    <div className="mt-20 w-full flex flex-col items-center space-y-5">
+    <div className="mt-24 md:mt-20 w-full flex flex-col items-center space-y-5">
       <div className="flex justify-end w-[95%]">
         <Link to={'/teacher/create'} className="bg-black text-white text-sm px-2 py-[8px] rounded-lg hover:bg-gray-800">
           <span className="flex items-center">

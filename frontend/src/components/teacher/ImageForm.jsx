@@ -59,7 +59,7 @@ export default function ImageForm({ image_url, id, setCourseChanged }) {
         ) : (
           <>
             <form action={editImage} className="flex flex-col space-y-2">
-              <input type="file" name="course-image" id="course-image" accept="image/jpg, image/png" />
+              <input type="file" name="course-image" id="course-image" accept="image/jpg, image/png" required />
               <button
                 type="submit"
                 className="bg-black h-[30px] flex justify-center items-center text-white text-sm py-2 rounded-md hover:bg-gray-800 w-[4rem]"
