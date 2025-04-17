@@ -1,4 +1,4 @@
--- Feed categories
+-- Seed categories
 
 INSERT INTO Category (category_id, name)
 VALUES 
@@ -10,7 +10,7 @@ VALUES
   (6, 'Business');
 
 
--- Feed courses and chapters
+-- Seed courses and chapters
 
 -- Web Development
 
