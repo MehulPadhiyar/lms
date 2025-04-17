@@ -2,7 +2,7 @@ import { Clock, CheckCircle } from 'lucide-react';
 
 export default function InfoCard({ variant, count }) {
   return (
-    <div className="flex items-center space-x-2 border-[1px] border-gray-300 p-2 rounded-lg w-full">
+    <div className="flex items-center space-x-2 border-[1px] border-gray-300 p-2 md:px-4 md:py-3 rounded-lg w-full">
       <div
         className={`size-11 ${
           variant === 'success' ? 'bg-emerald-100' : 'bg-secondary'

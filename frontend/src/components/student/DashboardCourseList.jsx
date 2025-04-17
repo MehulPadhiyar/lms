@@ -36,6 +36,8 @@ export default function DashboardCourseList({ setCourseStats }) {
               chaptersCount={course._count.chapters}
               image={course.image_url}
               setCourseStats={setCourseStats}
+              instructor={course.user.name}
+              instructorPhoto={course.user.photo}
             />
           ))}
         </div>

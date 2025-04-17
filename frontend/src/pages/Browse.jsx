@@ -2,11 +2,13 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { FcEngineering, FcMultipleDevices, FcMusic, FcManager, FcBusinessman } from 'react-icons/fc';
 import { PiCookingPotFill } from 'react-icons/pi';
 import CourseList from '../components/student/CourseList';
+import ApplyModal from '../components/student/ApplyModal';
 import { useOutletContext } from 'react-router-dom';
 import Banner from '../components/components/Banner';
 import { X } from 'lucide-react';
+import { useState } from 'react';
 
-const categories = [
+export const categories = [
   {
     id: 1,
     name: 'Computer Science',
@@ -41,6 +43,7 @@ const categories = [
 
 export default function Browse() {
   const location = useLocation();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const state = useOutletContext();
 
   const isActiveCategory = (category) => {
@@ -54,9 +57,9 @@ export default function Browse() {
           <div className="flex justify-between items-center w-full text-[0.940rem]">
             <p className="text-red-950">
               You don't have access to create courses.{' '}
-              <a href="/apply" className="text-blue-600 underline">
+              <button onClick={() => setIsModalVisible(true)} className="text-blue-600 underline">
                 Click here for apply.
-              </a>
+              </button>
             </p>
             <button onClick={() => state.setIsBannerOpen(false)} className="mr-3">
               <X className="text-gray-700" />
@@ -64,6 +67,7 @@ export default function Browse() {
           </div>
         </Banner>
       )}
+      {isModalVisible && <ApplyModal setIsModalVisible={setIsModalVisible} />}
       <div className="p-4 lg:p-6">
         <div className="flex flex-col space-y-3 md:grid md:grid-cols-3 md:space-y-0 md:gap-3 lg:flex lg:justify-center lg:flex-row lg:space-y-0 lg:gap-0 lg:space-x-2">
           {categories.map((cat) => {
@@ -84,7 +88,7 @@ export default function Browse() {
           })}
         </div>
         <div className="flex justify-center mt-6 lg:mt-9">
-          <div className="border-[1px] border-gray-300 rounded-full w-full lg:w-[70%]"></div>
+          <div className="border border-gray-300 rounded-full w-full lg:w-[70%]"></div>
         </div>
         <CourseList />
       </div>

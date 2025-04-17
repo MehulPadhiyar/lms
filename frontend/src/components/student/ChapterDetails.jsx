@@ -3,6 +3,7 @@ import parse from 'html-react-parser';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { CircleCheckBig, CircleX } from 'lucide-react';
+import Payment from './Payment';
 
 export default function ChapterDetails({ title, description, isLocked, coursePrice, courseId, chapterId }) {
   const [isCompleted, setIsCompleted] = useState();
@@ -22,6 +23,7 @@ export default function ChapterDetails({ title, description, isLocked, coursePri
           const progressRes = await axios.get(`${import.meta.env.VITE_API_URL}/courses/${courseId}/progress`, {
             withCredentials: true,
           });
+
           setIsCompleted(progressRes.data.data.chaptersCompleted.map((cur) => cur.chapter_id).includes(chapterId));
         } catch (err) {
           if (err.status === 401) return;
@@ -32,25 +34,6 @@ export default function ChapterDetails({ title, description, isLocked, coursePri
     },
     [chapterId]
   );
-
-  function enrollInCourse() {
-    async function enroll() {
-      try {
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/courses/${courseId}/enroll`,
-          {},
-          {
-            withCredentials: true,
-          }
-        );
-        toast.success('Enrolled successfully! 🎉');
-        setTimeout(() => window.location.reload(), 1500);
-      } catch (err) {
-        toast.error(err.message);
-      }
-    }
-    enroll();
-  }
 
   async function toggleCompletion() {
     try {
@@ -71,14 +54,9 @@ export default function ChapterDetails({ title, description, isLocked, coursePri
   return (
     <div className="mt-8">
       <div className="flex flex-col space-y-3 justify-between items-center mb-4 md:flex-row md:space-y-0">
-        <p className="font-bold text-lg">{title}</p>
+        <p className="font-bold text-xl">{title}</p>
         {isLocked || !isEnrolled ? (
-          <button
-            onClick={enrollInCourse}
-            className="w-full bg-sky-800 px-3 py-[8px] text-sm text-white font-semibold rounded-md md:w-auto"
-          >
-            Enroll for {coursePrice}₹
-          </button>
+          <Payment price={coursePrice} />
         ) : isCompleted ? (
           <button
             onClick={toggleCompletion}
@@ -100,7 +78,7 @@ export default function ChapterDetails({ title, description, isLocked, coursePri
         <div className="border-[1px] border-gray-300 rounded-full w-full"></div>
       </div>
       <div>
-        <span className="font-semibold italic">Objectives :</span>
+        <span className="font-bold italic">Objectives :</span>
         <div className="mt-2 pb-10">{description && parse(description)}</div>
       </div>
     </div>

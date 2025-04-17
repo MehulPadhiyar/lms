@@ -13,6 +13,8 @@
     "axios": "^1.7.9",
     "hamburger-react": "^2.5.2",
     "html-react-parser": "^5.2.2",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "lucide-react": "^0.473.0",
     "react": "19.0.0",
     "react-confetti": "^6.2.2",

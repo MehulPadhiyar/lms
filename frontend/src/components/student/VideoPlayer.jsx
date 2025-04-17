@@ -24,7 +24,7 @@ export default function VideoPlayer({ videoUrl, courseId, chapterId }) {
   };
 
   return (
-    <div className="rounded-sm overflow-hidden">
+    <div className="rounded-md overflow-hidden">
       <video src={`/course/video/${videoUrl}`} onEnded={setIsCompleted} controlsList="nodownload" controls></video>
     </div>
   );

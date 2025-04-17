@@ -48,7 +48,7 @@ export default function CourseId() {
 
   return (
     <>
-      {!course?.isPublished && (
+      {course?.status === 'draft' && (
         <Banner>
           <TriangleAlert className="size-5" />
           <p>This course is unpublished. It will not be visible to the student other than enrolled.</p>
@@ -67,7 +67,7 @@ export default function CourseId() {
               courseId={course?.course_id}
               isCompleted={isCompleted}
               setCourseChanged={setCourseChanged}
-              isPublished={course?.isPublished}
+              isPublished={course?.status === 'pending' || course?.status === 'verified'}
             />
           </div>
         </div>

@@ -38,7 +38,7 @@ export default function Course() {
               <tr>
                 <th className="px-8 py-3 font-semibold">Title</th>
                 <th className="px-8 py-3 font-semibold">Price</th>
-                <th className="px-8 py-3 font-semibold">Published</th>
+                <th className="px-8 py-3 font-semibold">Status</th>
                 <th className="px-8 py-3 font-semibold"></th>
               </tr>
             </thead>
@@ -48,11 +48,10 @@ export default function Course() {
                   <td className=" px-8 py-3">{course?.title}</td>
                   <td className=" px-8 py-3">{course?.price ? `${course.price} ₹` : ''}</td>
                   <td className=" px-8 py-3">
-                    {course?.isPublished ? (
-                      <Label bgColor="#0369a1">Published</Label>
-                    ) : (
-                      <Label bgColor="#696969">Draft</Label>
-                    )}
+                    {course?.status === 'draft' && <Label bgColor="#696969">Draft</Label>}
+                    {course?.status === 'pending' && <Label bgColor="#3f3f3f">Pending</Label>}{' '}
+                    {course?.status === 'verified' && <Label bgColor="#0369a1">Verified</Label>}
+                    {course?.status === 'rejected' && <Label bgColor="#e60000">Rejected</Label>}
                   </td>
                   <td className="px-8 py-3 w-20">
                     {' '}

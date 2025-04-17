@@ -5,6 +5,7 @@ import axios from 'axios';
 import CourseSidebarItem from './CourseSidebarItem';
 import UserProgress from '../student/UserProgress';
 import Hamburger from 'hamburger-react';
+import { Award } from 'lucide-react';
 
 export default function CourseSidebar({ isOpen, setIsOpen }) {
   const { courseId } = useParams();
@@ -26,8 +27,8 @@ export default function CourseSidebar({ isOpen, setIsOpen }) {
           });
           course.chaptersCompleted = progressRes.data.data.chaptersCompleted;
           course.userProgress = progressRes.data.data.userProgress;
+          course.enrolledUser = progressRes.data.data.user;
         }
-
         setCourse(course);
       } catch (err) {
         if (err.status === 401) return navigate('/login');
@@ -43,7 +44,7 @@ export default function CourseSidebar({ isOpen, setIsOpen }) {
   }
 
   return (
-    <div className="h-full">
+    <div className="h-full overflow-y-auto">
       <div className="md:hidden flex justify-end">
         <Hamburger toggled={isOpen} toggle={setIsOpen} rounded />
       </div>
@@ -52,6 +53,20 @@ export default function CourseSidebar({ isOpen, setIsOpen }) {
           {course?.title}
         </p>
         {course?.isEnrolled && <UserProgress progress={course?.userProgress} size="text-sm" />}
+
+        {course?.isEnrolled && (
+          <div className="w-full flex justify-center mt-6">
+            <a href={`/certificate/${course?.enrolledUser}/${courseId}`}>
+              <button
+                disabled={course?.userProgress !== 100}
+                className="bg-green-600 px-8 py-2 rounded-md text-white flex items-center gap-1 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <span>Certificate</span>
+                <Award size={18} />
+              </button>
+            </a>
+          </div>
+        )}
       </div>
       <div className="flex flex-col">
         {chapters?.map((chap) => (

@@ -122,7 +122,9 @@ export const getChapter = async (req, res, next) => {
       },
     });
 
-    if (!purchase && !chapter.isFree) chapter.videoUrl = null;
+    const isAdmin = req.user.role === 'admin';
+
+    if (!purchase && !chapter.isFree && !isAdmin) chapter.videoUrl = null;
 
     res.status(200).json({
       status: 'success',

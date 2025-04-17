@@ -1,8 +1,13 @@
 import { prisma } from './../server.js';
 import { AppError } from '../utils/appError.js';
 import multer from 'multer';
+import dotenv from 'dotenv';
+import Razorpay from 'razorpay';
+
+dotenv.config({ path: './.env' });
 
 //To parse and store image into storage coming from frontend
+
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'frontend/public/course/img');
@@ -25,16 +30,30 @@ const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
 export const uploadCoursePhoto = upload.single('photo');
 
+//Razorpay instance
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
+
 //api/v1/courses
 export const getAllCourses = async (req, res, next) => {
   try {
     const unfilteredCourses = await prisma.Course.findMany({
       where: {
-        isPublished: true,
+        status: {
+          equals: 'verified',
+        },
         ...(req.query.categoryId && { category_id: +req.query.categoryId }),
       },
       include: {
         category: true,
+        user: {
+          select: {
+            name: true,
+            photo: true,
+          },
+        },
         chapters: {
           where: {
             isPublished: true,
@@ -97,6 +116,59 @@ export const getAllCourses = async (req, res, next) => {
   }
 };
 
+//api/v1/courses/top-3
+export const getTop3Courses = async (req, res, next) => {
+  try {
+    const levels = ['Beginner', 'Intermediate', 'Advanced'];
+
+    const courseIdsAndCount = await prisma.Purchase.groupBy({
+      by: ['course_id'],
+      _count: {
+        course_id: true,
+      },
+      orderBy: {
+        _count: {
+          course_id: 'desc',
+        },
+      },
+      take: 3,
+    });
+
+    const rawCoursesPromise = courseIdsAndCount.map((id) =>
+      prisma.Course.findUnique({
+        where: {
+          course_id: id.course_id,
+        },
+        include: {
+          _count: {
+            select: {
+              chapters: true,
+            },
+          },
+        },
+      })
+    );
+
+    const rawCourses = await Promise.all(rawCoursesPromise);
+
+    const courses = rawCourses.map((course, i) => ({
+      ...course,
+      level: levels[i],
+      chapters: course._count.chapters,
+      students: courseIdsAndCount[i]._count.course_id,
+    }));
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        courses,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 //api/v1/courses/teacher
 export const getAllCoursesByInstructor = async (req, res, next) => {
   try {
@@ -106,6 +178,45 @@ export const getAllCoursesByInstructor = async (req, res, next) => {
       },
       orderBy: {
         created_at: 'desc',
+      },
+    });
+
+    res.status(200).json({
+      status: 'success',
+      results: courses.length,
+      data: {
+        courses,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//api/v1/courses/admin
+export const getAllCoursesForAdmin = async (req, res, next) => {
+  try {
+    const courses = await prisma.Course.findMany({
+      where: {
+        NOT: {
+          status: {
+            equals: 'draft',
+          },
+        },
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+            photo: true,
+          },
+        },
+        chapters: {
+          select: {
+            chapter_id: true,
+          },
+        },
       },
     });
 
@@ -277,6 +388,26 @@ export const updateCourse = async (req, res, next) => {
   }
 };
 
+export const updateStatus = async (req, res, next) => {
+  try {
+    const course = await prisma.Course.update({
+      where: {
+        course_id: req.params.courseId,
+      },
+      data: req.body,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        course,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 //We are not going to give option to delete a published course, because after user enrolled in a course, if instructor delete his/her course than it will be unfair for user.
 export const deleteCourse = async (req, res, next) => {
   try {
@@ -367,6 +498,7 @@ export const getProgress = async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
+      user: req.user.user_id,
       userProgress,
       chaptersCompleted: chaptersCompleted,
     },
@@ -391,6 +523,12 @@ export const getDashboardCourses = async (req, res, next) => {
       },
       include: {
         category: true,
+        user: {
+          select: {
+            name: true,
+            photo: true,
+          },
+        },
         chapters: {
           where: {
             isPublished: true,
@@ -432,8 +570,10 @@ export const getCourseStats = async (req, res, next) => {
   try {
     const coursesByInstructor = await prisma.Course.findMany({
       where: {
+        status: {
+          equals: 'verified',
+        },
         user_id: req.user.user_id,
-        isPublished: true,
       },
       select: {
         course_id: true,
@@ -472,6 +612,97 @@ export const getCourseStats = async (req, res, next) => {
         revenue,
         stats,
       },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const createOrder = async (req, res, next) => {
+  try {
+    const { amount, currency, receipt } = req.body;
+
+    const order = await razorpay.orders.create({ amount, currency, receipt });
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        name: req.user.name,
+        email: req.user.email,
+        order,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getCertificateData = async (req, res, next) => {
+  try {
+    const userName = req.user.name;
+    const { courseId } = req.params;
+
+    const course = await prisma.Course.findUnique({
+      where: {
+        course_id: courseId,
+      },
+      select: {
+        chapters: {
+          select: {
+            chapter_id: true,
+          },
+          where: {
+            isPublished: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        title: true,
+      },
+    });
+
+    if (!course) return next(new AppError('Course not found!', 404));
+
+    const purchase = await prisma.Purchase.findUnique({
+      where: {
+        user_id_course_id: {
+          user_id: req.user.user_id,
+          course_id: req.params.courseId,
+        },
+      },
+    });
+
+    if (!purchase) return next(new AppError("You have'nt purchased this course.", 400));
+
+    const chapterIds = course.chapters.map((chap) => chap.chapter_id);
+
+    const chaptersCompleted = await prisma.UserProgress.findMany({
+      where: {
+        user_id: req.user.user_id,
+        chapter_id: {
+          in: chapterIds,
+        },
+        isCompleted: true,
+      },
+      select: {
+        chapter_id: true,
+      },
+    });
+
+    let userProgress;
+
+    if (chaptersCompleted.length === chapterIds.length) userProgress = 100;
+    else userProgress = Math.round((chaptersCompleted.length * 100) / chapterIds.length);
+
+    if (userProgress !== 100) return next(new AppError("You haven't completed the course yet!"));
+
+    res.status(200).json({
+      userName,
+      instructor: course.user.name,
+      title: course.title,
     });
   } catch (err) {
     next(err);

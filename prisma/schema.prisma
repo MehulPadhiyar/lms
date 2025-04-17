@@ -15,61 +15,69 @@ model Category {
 }
 
 model Chapter {
-  chapter_id  String   @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
+  chapter_id  String  @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
   title       String
-  description String?  @db.Text
-  videoUrl    String?  @db.Text 
+  description String? @db.Text
+  videoUrl    String? @db.Text
   position    Int
-  isPublished Boolean  @default(false)    
-  isFree      Boolean  @default(false)
-  
-  course_id   String
-  course   Course @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
-  
+  isPublished Boolean @default(false)
+  isFree      Boolean @default(false)
+
+  course_id String
+  course    Course @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+
   userProgress UserProgress[]
-  
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
   @@index([course_id])
 }
 
 model Course {
-  course_id   String   @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
-  title       String   @db.Text
-  description String?  @db.Text
-  image_url   String?  @db.Text
+  course_id   String  @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
+  title       String  @db.Text
+  description String? @db.Text
+  image_url   String? @db.Text
   price       Float?
-  isPublished Boolean  @default(false)
-  
-  user_id     String
-  user   User? @relation(fields: [user_id], references: [user_id])
+  status      Status  @default(draft)
+
+  user_id String
+  user    User?  @relation(fields: [user_id], references: [user_id])
 
   category_id Int?
-  category   Category? @relation(fields: [category_id], references: [category_id])
+  category    Category? @relation(fields: [category_id], references: [category_id])
 
-  chapters Chapter[]
+  chapters  Chapter[]
   purchases Purchase[]
-  
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@index([category_id])
   @@index([user_id])
   @@fulltext([title])
 }
 
-model Purchase {
-  purchase_id String   @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
-  
-  course_id   String
-  course   Course @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
-  
-  user_id     String
-  user   User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+model Sample {
+  sample_id String @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
+  video_url String @db.Text
 
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  user_id String
+  user    User?  @relation(fields: [user_id], references: [user_id])
+}
+
+model Purchase {
+  purchase_id String @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
+
+  course_id String
+  course    Course @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@unique([user_id, course_id])
   @@index([course_id])
@@ -86,23 +94,24 @@ model User {
   password_reset_token   String?   @db.VarChar(250)
   password_reset_expires BigInt?
 
-  courses Course[]
-  purchases Purchase[]
+  courses      Course[]
+  samples      Sample[]
+  purchases    Purchase[]
   userProgress UserProgress[]
 }
 
 model UserProgress {
-  id          String   @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
-  isCompleted Boolean  @default(false)
-  
-  chapter_id  String
-  chapter   Chapter @relation(fields: [chapter_id], references: [chapter_id], onDelete: Cascade)
-  
-  user_id     String
-  user   User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String  @id @default(dbgenerated("(uuid())")) @db.VarChar(250)
+  isCompleted Boolean @default(false)
+
+  chapter_id String
+  chapter    Chapter @relation(fields: [chapter_id], references: [chapter_id], onDelete: Cascade)
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([user_id, chapter_id])
   @@index([chapter_id])
@@ -112,4 +121,11 @@ enum User_role {
   user
   instructor
   admin
+}
+
+enum Status {
+  draft
+  pending
+  verified
+  rejected
 }

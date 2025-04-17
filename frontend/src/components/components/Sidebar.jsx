@@ -6,6 +6,9 @@ import Hamburger from 'hamburger-react';
 export default function Sidebar({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
 
+  const pathname = window.location.pathname;
+  const isHome = pathname === '/';
+
   async function checkAuth() {
     try {
       await axios.post(
@@ -20,16 +23,19 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     }
   }
 
-  checkAuth();
+  if (!isHome) checkAuth();
 
   return (
     <div className="h-full w-[80%] px-2 bg-primary md:w-full">
-      <div className="flex justify-between items-center md:justify-center mt-4">
+      <div className={`flex justify-between items-center pt-4 ${isHome ? 'xl:justify-center' : 'md:justify-center'}`}>
         <Link to="/" className="flex items-center">
           <img src="/Logo.png" alt="logo" className="w-9" />
-          <p className="uppercase font-[900] text-white text-[1.75rem]">Learnify</p>
+          <div className="uppercase font-[900] text-black text-[1.75rem]">
+            <span className="text-white font-poppins">Learn</span>
+            <span className="lowercase font-normal">ify</span>
+          </div>
         </Link>
-        <div className="md:hidden">
+        <div className={`${isHome ? 'xl:hidden' : 'md:hidden'}`}>
           <Hamburger toggled={isOpen} toggle={setIsOpen} rounded color="#ffffff" />
         </div>
       </div>

@@ -13,6 +13,8 @@ export default function CourseCard({
   chaptersCount,
   image,
   setCourseStats,
+  instructor,
+  instructorPhoto,
 }) {
   const [userProgress, setUserProgress] = useState();
 
@@ -39,10 +41,14 @@ export default function CourseCard({
 
   return (
     <Link to={`/courses/${courseId}/chapters/${firstChapterId}`}>
-      <div className="group border-2 border-gray-300 max-w-[100%] min-h-[100%] p-2 rounded-lg">
+      <div className="group border border-gray-400 shadow-sm max-w-[100%] min-h-[100%] p-2 rounded-lg">
         <img src={`course/img/${image}`} alt="course image" className="rounded-lg mb-4 h-40 w-full" />
         <p className="font-bold text-xl group-hover:text-primary">{title?.charAt(0).toUpperCase() + title?.slice(1)}</p>
-        <p className="text-xs text-slate-500 mb-4">{category}</p>
+        <div className="flex items-center gap-2 mb-3">
+          <img src={`/user/${instructorPhoto}`} alt="Instructor photo" className="size-5 rounded-full object-cover" />
+          <p className="text-xs font-semibold text-slate-600">by {instructor}</p>
+        </div>
+        <p className="text-xs text-slate-500 mb-2">{category}</p>
         <div className="flex space-x-1 items-center mb-2">
           <div className="rounded-full bg-sky-100 size-6 flex justify-center items-center">
             <BookOpen className="size-4" />

@@ -11,6 +11,8 @@ import cookieParser from 'cookie-parser';
 const app = express();
 
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+// app.use(cors({ origin: 'https://w6jrn77q-5173.inc1.devtunnels.ms', credentials: true }));
+
 //This middleware is used to parse incoming req body into object
 app.use(express.json());
 app.use(cookieParser());

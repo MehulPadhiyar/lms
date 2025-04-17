@@ -6,6 +6,7 @@ import { AppError } from '../utils/appError.js';
 import validator from 'validator';
 import crypto from 'crypto';
 import sendEmail from './../utils/email.js';
+import multer from 'multer';
 
 const hashPassword = async (password) => {
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -20,6 +21,29 @@ const checkPassword = async (userPassword, hashedPassword) => {
   return await bcrypt.compare(userPassword, hashedPassword);
 };
 
+//To parse and store image into storage coming from frontend
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'frontend/public/user');
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `profile-${req.body.email}-${Date.now()}.${ext}`);
+  },
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images.', 400), false);
+  }
+};
+
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+
+export const uploadProfilePhoto = upload.single('photo');
+
 export const signUp = async (req, res, next) => {
   try {
     req.body.password = await hashPassword(req.body.password);
@@ -29,6 +53,7 @@ export const signUp = async (req, res, next) => {
 
     //Temporary solution for password validation
     // if (req.body.password.length < 8) return next(new AppError('Password must be greater than 8 characters!'));
+
     const newUser = await prisma.User.create({
       data: {
         name: req.body.name,
@@ -36,6 +61,7 @@ export const signUp = async (req, res, next) => {
         password: req.body.password,
         photo: req.body.photo,
         role: req.body.role,
+        photo: req.file.filename,
       },
     });
 
@@ -55,6 +81,7 @@ export const signUp = async (req, res, next) => {
       },
     });
   } catch (err) {
+    console.log('JHuhuihiui');
     next(err);
   }
 };

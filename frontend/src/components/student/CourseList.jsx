@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import CourseCard from './CourseCard';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function CourseList() {
@@ -46,6 +47,8 @@ export default function CourseList() {
               price={course.price}
               image={course.image_url}
               isEnrolled={course.isEnrolled}
+              instructor={course.user.name}
+              instructorPhoto={course.user.photo}
             />
           ))}
         </div>

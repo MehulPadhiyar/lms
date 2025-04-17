@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 
-export default function SidebarItem({ href, Icon, label, setIsOpen }) {
-  return (
+export default function SidebarItem({ isHome, href, Icon, label, setIsOpen }) {
+  return !isHome ? (
     <NavLink
       to={href}
       className={({ isActive }) => {
@@ -11,6 +11,11 @@ export default function SidebarItem({ href, Icon, label, setIsOpen }) {
       }}
       onClick={() => setIsOpen(false)}
     >
+      <Icon className={'size-5 mr-4'} />
+      {label}
+    </NavLink>
+  ) : (
+    <NavLink to={href} className="pl-8 w-full flex items-center py-4 text-white" onClick={() => setIsOpen(false)}>
       <Icon className={'size-5 mr-4'} />
       {label}
     </NavLink>
